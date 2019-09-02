@@ -8,9 +8,8 @@ class LibView{
 	static void intialise(){
 		DAO.initData();
 	}
-
 	public static void main(String[] args) {
-		
+
 		intialise();
 
 		int userId=0,bookId=0;
@@ -20,6 +19,7 @@ class LibView{
 
 		while(true){
 
+		 try{
 			System.out.println("\nWhat operation do you want to perform !\n");
 			System.out.println("1 : Issue Book ");
 			System.out.println("2 : Return Book ");
@@ -70,7 +70,22 @@ class LibView{
 						 break ;
 				case 5 : System.out.println("\nOkay, Command accepeted Exiting now.\n");
 						 System.exit(0);
+
 			}
+		 }
+		 catch(BookNotFoundException bnfe){
+		 	System.out.println(bnfe.getMessage());
+		 }
+		 catch(UserNotFoundException unfe){
+		 	System.out.println(unfe.getMessage());
+		 }
+		 catch(BookNotAvailableException bnae){
+		 	System.out.println(bnae.getMessage());
+		 }
+		 catch(InsufficientBalanceException ibe){
+		 	System.out.println(ibe.getMessage());
+		 }
+
 		}
 	}
 }

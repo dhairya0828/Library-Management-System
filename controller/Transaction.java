@@ -35,7 +35,10 @@ public class Transaction{
 	}
 
 
-	public String issueBook(int userId,int bookId){
+	public String issueBook(int userId,int bookId) 
+	throws UserNotFoundException,BookNotFoundException,
+		   InsufficientBalanceException,BookNotAvailableException{
+	
 		tempUserId = validUser(userId);
 		if( tempUserId != -1)
 		{
@@ -45,7 +48,8 @@ public class Transaction{
 				if(student){
 
 					if(DAO.studentUsers[tempUserId].balance == 0)
-						return "\nOops ! User has not sufficient available balance to issue Book.";
+						//return "\nOops ! User does not have sufficient available balance to issue Book.";
+						throw new InsufficientBalanceException();
 					DAO.studentUsers[tempUserId].balance--;
 					student = false ;
 
@@ -53,13 +57,15 @@ public class Transaction{
 				else if(staff){
 
 					if(DAO.staffUsers[tempUserId].balance == 0)
-						return "\nOops ! User has not sufficient available balance to issue Book.";
+						//return "\nOops ! User does not have sufficient available balance to issue Book.";	
+						throw new InsufficientBalanceException();
 					DAO.staffUsers[tempUserId].balance--;
 					staff = false ;
 
 				}	
 				if(!DAO.hardMedias[tempBookId].availibility)
-					return "\nOops ! Requested Book is currently not available. :( " ;
+					//return "\nOops ! Requested Book is currently not available. :( " ;
+					throw new BookNotAvailableException();
 
 				DAO.hardMedias[tempBookId].quantity--;
 				if(DAO.hardMedias[tempBookId].quantity == 0)
@@ -68,10 +74,12 @@ public class Transaction{
 				return ("\nBook " + DAO.hardMedias[tempBookId].title + " Issued SuccessFully.");
 			}
 			else
-				return ("\nOops ! Book not found. Please Enter valid Book ID.");
+				//return ("\nOops ! Book not found. Please Enter valid Book ID.");
+				throw new BookNotFoundException();
 		}
 		else
-			return ("\nOops ! User not recognized. Please enter valid User ID.");
+			//return ("\nOops ! User not recognized. Please enter valid User ID.");
+			throw new UserNotFoundException();
 
 	}
 
