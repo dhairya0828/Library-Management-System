@@ -83,7 +83,8 @@ public class Transaction{
 
 	}
 
-	public String returnBook(int userId,int bookId){
+	public String returnBook(int userId,int bookId)
+	throws UserNotFoundException,BookNotFoundException{
 
 		// Let's hope that user can return book so no need to check balance 
 
@@ -98,14 +99,17 @@ public class Transaction{
 				return ("\nBook " + DAO.hardMedias[tempBookId].title + " Returned SuccessFully.");
 			}
 			else
-				return ("\nOops ! Book not found. Please Enter valid Book ID.");
+				//return ("\nOops ! Book not found. Please Enter valid Book ID.");
+				throw new BookNotFoundException();
 		}
 		else
-			return ("\nOops ! User not recognized. Please enter valid User ID.");
+			//return ("\nOops ! User not recognized. Please enter valid User ID.");
+			throw new UserNotFoundException();
 
 	}
 
-	public int checkBalance(int userId){
+	public int checkBalance(int userId)
+	throws UserNotFoundException{
 
 		if((tempUserId = validUser(userId)) != -1){
 			
@@ -120,15 +124,18 @@ public class Transaction{
 				return DAO.staffUsers[tempUserId].balance ;
 			}
 		}
-		return -1; // invalid user 
+		//return -1; // invalid user 
+		throw new UserNotFoundException();
 
 	} 
 
-	public String searchBook(String bookName){
+	public String searchBook(String bookName)
+	throws BookNotFoundException{
 		
 		for(int i=0;i<DAO.hardMedias.length;i++)
 			if(DAO.hardMedias[i].title.indexOf(bookName) != -1)
 				return DAO.hardMedias[i].title;
-		return "";
+		//return "";
+		throw new BookNotFoundException();
 	}
 }
