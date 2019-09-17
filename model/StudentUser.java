@@ -10,10 +10,10 @@ public class StudentUser extends User{
 	/*	
 		this.name = name.toUpperCase();
 		this.branch = branch.toUpperCase() ;
-		this.balance = 3 ; // for students 
+		this.balance = 4 ; // for students 
 		this.id = ++userCount;
 	*/
-		super(name,branch,3);
+		super(name,branch,4);
 	//	System.out.println("student : " + id);
 		this.rollNo = rollNo.toUpperCase() ;
 		this.semester = semester ;		

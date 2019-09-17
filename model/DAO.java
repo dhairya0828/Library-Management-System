@@ -18,7 +18,8 @@ public class DAO{
 
 		// Initializing HardMedia with 2 books at the moment (Can be expanded later)
 		hardMedias[0] = new HardMedia("Head First Java","HeadFirsts",5);
-		hardMedias[1] = new HardMedia("Subtle Art of not giving f*ck","Mark Manson",3);
+		hardMedias[1] = new HardMedia("Head First Python","Mark Manson",3);
+		//Subtle Art of not giving f*ck
 		System.out.println("Data Initialised \n");
 	}
 

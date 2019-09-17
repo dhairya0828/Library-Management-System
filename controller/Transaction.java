@@ -1,5 +1,6 @@
 package lms.controller;
 import lms.model.*;
+import java.util.*;
 
 
 public class Transaction{
@@ -50,15 +51,17 @@ public class Transaction{
 					if(DAO.studentUsers[tempUserId].balance == 0)
 						//return "\nOops ! User does not have sufficient available balance to issue Book.";
 						throw new InsufficientBalanceException();
+
+					DAO.studentUsers[tempUserId].assigned.add(tempBookId);
 					DAO.studentUsers[tempUserId].balance--;
 					student = false ;
-
 				}
 				else if(staff){
 
 					if(DAO.staffUsers[tempUserId].balance == 0)
 						//return "\nOops ! User does not have sufficient available balance to issue Book.";	
 						throw new InsufficientBalanceException();
+					DAO.staffUsers[tempUserId].assigned.add(tempBookId);
 					DAO.staffUsers[tempUserId].balance--;
 					staff = false ;
 
@@ -66,11 +69,10 @@ public class Transaction{
 				if(!DAO.hardMedias[tempBookId].availibility)
 					//return "\nOops ! Requested Book is currently not available. :( " ;
 					throw new BookNotAvailableException();
-
+				DAO.hardMedias[tempBookId].assigned.add(tempUserId);
 				DAO.hardMedias[tempBookId].quantity--;
 				if(DAO.hardMedias[tempBookId].quantity == 0)
 					DAO.hardMedias[tempBookId].availibility = false;
-
 				return ("\nBook " + DAO.hardMedias[tempBookId].title + " Issued SuccessFully.");
 			}
 			else
@@ -92,7 +94,15 @@ public class Transaction{
 		
 			if((tempBookId = validBook(bookId)) != -1){
 
-				DAO.studentUsers[tempUserId].balance++;
+				if(student){
+					DAO.studentUsers[tempUserId].balance++;
+					DAO.studentUsers[tempUserId].assigned.remove(tempBookId);
+				}
+				else if(staff){
+					DAO.staffUsers[tempUserId].assigned.remove(tempBookId);
+					DAO.staffUsers[tempUserId].balance++;
+				}	
+				DAO.hardMedias[tempBookId].assigned.remove(tempUserId);
 				DAO.hardMedias[tempBookId].quantity++;
 				DAO.hardMedias[tempBookId].availibility = true;
 
@@ -131,11 +141,37 @@ public class Transaction{
 
 	public String searchBook(String bookName)
 	throws BookNotFoundException{
-		
+		String books = "\n";
 		for(int i=0;i<DAO.hardMedias.length;i++)
-			if(DAO.hardMedias[i].title.indexOf(bookName) != -1)
-				return DAO.hardMedias[i].title;
+			if(DAO.hardMedias[i].title.indexOf(bookName) != -1){
+				books += DAO.hardMedias[i].title;
+				books+="\n";
+			}
 		//return "";
-		throw new BookNotFoundException();
+		if(books.equals("\n"))
+			throw new BookNotFoundException();
+		return books ;
 	}
+
+	public ArrayList<String> showAssigned(int id)
+	throws UserNotFoundException,BookNotFoundException
+	{
+			if((id = validUser(id)) != -1){
+				ArrayList <String> tempList = new ArrayList();
+				if(student){
+					student = false ;
+					for(int i=0;i<DAO.studentUsers[id].assigned.size();i++)
+						tempList.add(DAO.hardMedias[DAO.studentUsers[id].assigned.get(i)].title);
+					//return DAO.studentUsers[id].assigned ;
+				}
+				else if(staff){
+					staff = false ;
+					for(int i=0;i<DAO.staffUsers[id].assigned.size();i++)
+						tempList.add(DAO.hardMedias[DAO.staffUsers[id].assigned.get(i)].title);
+					//return DAO.staffUsers[id].assigned ;
+				}
+				return tempList;
+			}
+		throw new UserNotFoundException();
+	}	
 }

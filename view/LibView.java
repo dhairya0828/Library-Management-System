@@ -8,7 +8,16 @@ class LibView{
 	static void intialise(){
 		DAO.initData();
 	}
-	public static void main(String[] args) {
+
+	static void printAssigned(ArrayList<String> tempList,int ch,int id){
+		if(ch == 1){
+			System.out.println("\nBook assigned to user id : " + id + " are \n");
+			for(String temp : tempList )
+				System.out.println(temp);
+		}
+	}
+
+	public static void main(String[] args){
 
 		intialise();
 
@@ -20,12 +29,13 @@ class LibView{
 		while(true){
 
 		 try{
-			System.out.println("\nWhat operation do you want to perform !\n");
+			System.out.println("\nWhich operation do you want to perform !\n");
 			System.out.println("1 : Issue Book ");
 			System.out.println("2 : Return Book ");
 			System.out.println("3 : Check balance Information ");
 			System.out.println("4 : Search Book");
-			System.out.println("5 : Exit");
+			System.out.println("5 : Show assigned books");
+			System.out.println("6 : Exit");
 			System.out.print("Enter choice : ");
 			Scanner input = new Scanner(System.in);
 			int choice = input.nextInt();
@@ -68,8 +78,24 @@ class LibView{
 						 else
 						 	System.out.println("\nOops ! Book not found :(");
 						 break ;
-				case 5 : System.out.println("\nOkay, Command accepeted Exiting now.\n");
+
+				case 5 : //showAssignedBook(int id)
+						 System.out.println("\nEnter user id to show Books assigned to student !");
+						 ArrayList <String> tempList = new ArrayList();
+						 int tempCode = 0;
+						 int id = -1;
+						 
+						 System.out.print("Enter User Id : ");
+						 userId = input.nextInt();
+						 tempList = transaction.showAssigned(userId);
+						 tempCode = 1 ;
+						 id = userId;	
+						 printAssigned(tempList,tempCode,id);
+						 break ;
+
+				case 6 : System.out.println("\nOkay, Command accepeted Exiting now.\n");
 						 System.exit(0);
+				default : System.out.println("\nAhh ! Invalid Choice please try again.\n");
 
 			}
 		 }
@@ -85,7 +111,6 @@ class LibView{
 		 catch(InsufficientBalanceException ibe){
 		 	System.out.println(ibe.getMessage());
 		 }
-
 		}
 	}
 }

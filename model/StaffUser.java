@@ -5,11 +5,11 @@ public class StaffUser extends User{
 	String proffId;
 	StaffUser(String name, String branch, String proffId)
 	{
-		super(name,branch,5);
+		super(name,branch,4);
 	/*	
 		this.name = name.toUpperCase();
 		this.branch = branch.toUpperCase() ;
-		this.balance = 5 ; // for staff 
+		this.balance = 4 ; // for staff 
 		this.id = ++userCount;
 	*/
 	//	System.out.println("Staff : " + id);
